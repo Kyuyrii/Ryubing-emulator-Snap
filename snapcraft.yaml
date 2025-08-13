@@ -1,0 +1,73 @@
+name: ryubing-emulator
+base: core24
+version: '1.3.2'
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+summary: Nintendo Switch emulator
+description: |
+  Ryujinx is an open-source Nintendo Switch emulator written in C#. This is a fork of the original project created by gdkchan.
+
+  This emulator aims at providing excellent accuracy and performance, a user-friendly interface, and consistent builds.
+grade: stable
+confinement: strict
+
+apps:
+  ryubing-emulator:
+    command: usr/games/Ryujinx.sh
+    desktop: usr/share/applications/Ryubing.desktop
+    common-id: io.github.ryubing.Ryujinx
+    extensions: [kde-neon-6]
+    plugs:
+      - unity7
+      - screen-inhibit-control
+      - audio-playback
+      - network
+      - network-bind
+      - home
+      - removable-media
+      - mount-observe
+      - joystick
+      - bluez
+      - udisks2
+
+plugs:
+  shared-memory:
+    private: true
+  system-files:
+    read:
+      - /proc/sys/vm/max_map_count
+
+parts:
+  ryubing:
+    plugin: nil
+    build-packages:
+      - wget
+    override-build: |
+      wget https://git.ryujinx.app/api/v4/projects/1/packages/generic/Ryubing/$SNAPCRAFT_PROJECT_VERSION/ryujinx-$SNAPCRAFT_PROJECT_VERSION-linux_x64.tar.gz
+      tar -xzvf ryujinx-$SNAPCRAFT_PROJECT_VERSION-linux_x64.tar.gz
+      mkdir -p $CRAFT_PART_INSTALL/usr
+      mv -f publish $CRAFT_PART_INSTALL/usr/games
+    prime:
+      - usr/games
+
+  dependencies:
+    plugin: nil
+    stage-packages:
+      - libjack0
+    prime:
+      - usr/lib/x86_64-linux-gnu
+
+  gui-launcher:
+    after: [ryubing]
+    plugin: nil
+    source: ./gui-launcher
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/local/share/icons/hicolor/scalable/apps/
+      mkdir -p $CRAFT_PART_INSTALL/usr/share/applications/
+      mv -f Ryubing.svg $CRAFT_PART_INSTALL/usr/local/share/icons/hicolor/scalable/apps/
+      mv -f Ryubing.desktop $CRAFT_PART_INSTALL/usr/share/applications/
+    prime:
+      - usr/local/share/icons/hicolor/scalable/apps/Ryubing.svg
+      - usr/share/applications/Ryubing.desktop
