@@ -31,13 +31,11 @@ apps:
       - joystick
       - bluez
       - udisks2
+      - system-observe
 
 plugs:
   shared-memory:
     private: true
-  system-files:
-    read:
-      - /proc/sys/vm/max_map_count
 
 parts:
   ryubing:
