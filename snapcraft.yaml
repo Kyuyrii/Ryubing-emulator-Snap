@@ -45,7 +45,7 @@ parts:
     plugin: dump
     source:
       - on amd64: https://git.ryujinx.app/api/v4/projects/1/packages/generic/Ryubing/$SNAPCRAFT_PROJECT_VERSION/ryujinx-$SNAPCRAFT_PROJECT_VERSION-linux_x64.tar.gz
-      - on arm64: https://git.ryujinx.app/api/v4/projects/1/packages/generic/Ryubing/$SNAPCRAFT_PROJECT_VERSION/ryujinx-$SNAPCRAFT_PROJECT_VERSION-linux_aarch64.tar.gz
+      - on arm64: https://git.ryujinx.app/api/v4/projects/1/packages/generic/Ryubing/$SNAPCRAFT_PROJECT_VERSION/ryujinx-$SNAPCRAFT_PROJECT_VERSION-linux_arm64.tar.gz
     organize:
       "*": usr/games/
     prime:
