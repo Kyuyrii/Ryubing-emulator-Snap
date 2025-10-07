@@ -1,0 +1,71 @@
+name: ryubing-emulator
+base: core24
+version: '1.3.2'
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+  arm64:
+    build-on: [arm64]
+    build-for: [arm64]
+summary: Nintendo Switch emulator
+description: |
+  Ryujinx is an open-source Nintendo Switch emulator written in C#. This is a fork of the original project created by gdkchan.
+
+  This emulator aims at providing excellent accuracy and performance, a user-friendly interface, and consistent builds.
+grade: stable
+confinement: strict
+
+apps:
+  ryubing-emulator:
+    command: usr/games/Ryujinx.sh
+    desktop: usr/gui/Ryubing.desktop
+    common-id: io.github.ryubing.Ryujinx
+    extensions: [kde-neon-6]
+    plugs:
+      - unity7
+      - screen-inhibit-control
+      - audio-playback
+      - network
+      - network-bind
+      - home
+      - removable-media
+      - mount-observe
+      - joystick
+      - bluez
+      - udisks2
+      - system-observe
+
+plugs:
+  shared-memory:
+    private: true
+
+parts:
+  ryubing:
+    plugin: dump
+    source:
+      - on amd64: https://git.ryujinx.app/api/v4/projects/1/packages/generic/Ryubing/$SNAPCRAFT_PROJECT_VERSION/ryujinx-$SNAPCRAFT_PROJECT_VERSION-linux_x64.tar.gz
+      - on arm64: https://git.ryujinx.app/api/v4/projects/1/packages/generic/Ryubing/$SNAPCRAFT_PROJECT_VERSION/ryujinx-$SNAPCRAFT_PROJECT_VERSION-linux_aarch64.tar.gz
+    organize:
+      "*": usr/games/
+    prime:
+      - usr/games
+
+  gui-launcher:
+    after: [ryubing]
+    plugin: nil
+    source: ./gui-launcher
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/gui
+      mv -f Ryubing.svg $CRAFT_PART_INSTALL/usr/gui/
+      mv -f Ryubing.desktop $CRAFT_PART_INSTALL/usr/gui/
+    prime:
+      - usr/gui/
+
+  dependencies:
+    after: [gui-launcher]
+    plugin: nil
+    stage-packages:
+      - libjack0
+    prime:
+      - usr/lib/x86_64-linux-gnu/libjack.so*
