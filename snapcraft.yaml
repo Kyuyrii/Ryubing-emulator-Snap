@@ -1,6 +1,6 @@
 name: ryubing-emulator
 base: core24
-version: '1.3.2'
+version: '1.3.3'
 platforms:
   amd64:
     build-on: [amd64]
