@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export XDG_CONFIG_HOME="$SNAP_USER_COMMON/.config"
+export XDG_DATA_HOME="$SNAP_USER_COMMON/.local/share"
+export XDG_CACHE_HOME="$SNAP_USER_COMMON/.cache"
+
+if [ -d "$SNAP_USER_DATA/.config/Ryujinx" ]; then
+    cp -r "$SNAP_USER_DATA/.config/Ryujinx" "$SNAP_USER_COMMON/.config/"
+    rm -rf "$SNAP_USER_DATA/.config/Ryujinx"
+fi
+
+exec "$@"

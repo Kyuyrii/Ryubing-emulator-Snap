@@ -1,9 +1,9 @@
 [Desktop Entry]
 Version=1.0
-Name=Ryubing [NyKyu]
+Name=Ryujinx [Kyu]
 Type=Application
-Icon=${SNAP}/usr/gui/Ryubing.svg
-Exec=${SNAP}/usr/games/Ryujinx.sh %f
+Icon=Ryujinx
+Exec=Ryujinx.sh %f
 Comment=A Nintendo Switch Emulator
 GenericName=Nintendo Switch Emulator
 Terminal=false

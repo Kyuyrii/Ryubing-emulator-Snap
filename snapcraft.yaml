@@ -15,11 +15,13 @@ description: |
   This emulator aims at providing excellent accuracy and performance, a user-friendly interface, and consistent builds.
 grade: stable
 confinement: strict
+icon: Logo.svg
 
 apps:
   ryubing-emulator:
+    command-chain: [override-xdg-paths]
     command: usr/games/Ryujinx.sh
-    desktop: usr/gui/Ryubing.desktop
+    desktop: Ryujinx.desktop
     common-id: io.github.ryubing.Ryujinx
     extensions: [kde-neon-6]
     plugs:
@@ -41,7 +43,7 @@ plugs:
     private: true
 
 parts:
-  ryubing:
+  ryubing-app:
     plugin: dump
     source:
       - on amd64: https://git.ryujinx.app/api/v4/projects/1/packages/generic/Ryubing/$SNAPCRAFT_PROJECT_VERSION/ryujinx-$SNAPCRAFT_PROJECT_VERSION-linux_x64.tar.gz
@@ -51,21 +53,18 @@ parts:
     prime:
       - usr/games
 
-  gui-launcher:
-    after: [ryubing]
-    plugin: nil
-    source: ./gui-launcher
-    override-build: |
-      mkdir -p $CRAFT_PART_INSTALL/usr/gui
-      mv -f Ryubing.svg $CRAFT_PART_INSTALL/usr/gui/
-      mv -f Ryubing.desktop $CRAFT_PART_INSTALL/usr/gui/
-    prime:
-      - usr/gui/
-
   dependencies:
-    after: [gui-launcher]
+    after: [ryubing-app]
     plugin: nil
     stage-packages:
       - libjack0
     prime:
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libjack.so*
+
+  other-files:
+    after: [dependencies]
+    plugin: dump
+    source: ./other-files
+    prime:
+      - override-xdg-paths
+      - Ryujinx.desktop
